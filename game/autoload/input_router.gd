@@ -16,7 +16,9 @@ func _input(event: InputEvent) -> void:
 		device = Device.TOUCH
 	elif event is InputEventJoypadButton:
 		device = Device.GAMEPAD
-	elif event is InputEventJoypadMotion and absf((event as InputEventJoypadMotion).axis_value) > 0.3:
+	elif (
+		event is InputEventJoypadMotion and absf((event as InputEventJoypadMotion).axis_value) > 0.3
+	):
 		device = Device.GAMEPAD
 	elif event is InputEventKey or event is InputEventMouseButton:
 		device = Device.KEYBOARD_MOUSE

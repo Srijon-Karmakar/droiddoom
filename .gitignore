@@ -8,6 +8,8 @@
 #    locally). Back them up separately — git will NOT version them.
 # ---------------------------------------------------------------------
 /projectdetails.md
+/AGENTS.md
+/CLAUDE.md
 /docs/*
 # ...except files that are safe/necessary to share:
 !/docs/ASSET_LICENSES.md

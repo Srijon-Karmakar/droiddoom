@@ -1,0 +1,117 @@
+; Engine configuration file.
+; Droidoom — Godot 4.7.2-stable (D-002). Compatibility renderer everywhere (D-014).
+
+config_version=5
+
+[application]
+
+config/name="Droidoom"
+config/description="Realistic 3D action shooter — a human-piloted droid vs the AI AXIOM."
+config/version="0.0.1"
+run/main_scene="res://world/common/boot.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[autoload]
+
+EventBus="*res://autoload/event_bus.gd"
+Settings="*res://autoload/settings.gd"
+Profile="*res://autoload/profile.gd"
+SaveManager="*res://autoload/save_manager.gd"
+Economy="*res://autoload/economy.gd"
+GameState="*res://autoload/game_state.gd"
+QualityManager="*res://autoload/quality_manager.gd"
+InputRouter="*res://autoload/input_router.gd"
+AudioManager="*res://autoload/audio_manager.gd"
+PlatformServices="*res://autoload/platform_services.gd"
+SceneRouter="*res://autoload/scene_router.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[input]
+
+move_left={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":65), Object(InputEventJoypadMotion,"axis":0,"axis_value":-1.0)]
+}
+move_right={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":68), Object(InputEventJoypadMotion,"axis":0,"axis_value":1.0)]
+}
+move_up={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":87), Object(InputEventJoypadMotion,"axis":1,"axis_value":-1.0)]
+}
+move_down={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":83), Object(InputEventJoypadMotion,"axis":1,"axis_value":1.0)]
+}
+aim_left={
+"deadzone": 0.2,
+"events": [Object(InputEventJoypadMotion,"axis":2,"axis_value":-1.0)]
+}
+aim_right={
+"deadzone": 0.2,
+"events": [Object(InputEventJoypadMotion,"axis":2,"axis_value":1.0)]
+}
+aim_up={
+"deadzone": 0.2,
+"events": [Object(InputEventJoypadMotion,"axis":3,"axis_value":-1.0)]
+}
+aim_down={
+"deadzone": 0.2,
+"events": [Object(InputEventJoypadMotion,"axis":3,"axis_value":1.0)]
+}
+fire_primary={
+"deadzone": 0.3,
+"events": [Object(InputEventMouseButton,"button_index":1), Object(InputEventJoypadMotion,"axis":5,"axis_value":1.0)]
+}
+fire_heavy={
+"deadzone": 0.3,
+"events": [Object(InputEventMouseButton,"button_index":2), Object(InputEventJoypadMotion,"axis":4,"axis_value":1.0)]
+}
+ability={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":32), Object(InputEventKey,"physical_keycode":4194325), Object(InputEventJoypadButton,"button_index":0), Object(InputEventJoypadButton,"button_index":10)]
+}
+reclaim={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":69), Object(InputEventJoypadButton,"button_index":2)]
+}
+switch_camera={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":86), Object(InputEventJoypadButton,"button_index":4)]
+}
+pause={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":4194305), Object(InputEventJoypadButton,"button_index":6)]
+}
+toggle_debug={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":4194334)]
+}
+
+[layer_names]
+
+3d_physics/layer_1="world"
+3d_physics/layer_2="player"
+3d_physics/layer_3="player_projectiles"
+3d_physics/layer_4="enemies"
+3d_physics/layer_5="enemy_projectiles"
+3d_physics/layer_6="pickups"
+3d_physics/layer_7="allies"
+3d_physics/layer_8="triggers"
+3d_physics/layer_9="camera_occluders"
+3d_physics/layer_10="navigation_only"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
+anti_aliasing/quality/msaa_3d=1

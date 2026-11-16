@@ -1,0 +1,97 @@
+[gd_scene format=3 uid="uid://c7mn4rxvtngfx"]
+
+[ext_resource type="Script" uid="uid://ou5ivbdajfjh" path="res://world/dev/feature_check/feature_check.gd" id="1_fc"]
+[ext_resource type="LightmapGIData" uid="uid://dmx6m6tg54pfq" path="res://world/dev/feature_check/feature_check.lmbake" id="2_o3h2t"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
+sky_top_color = Color(0.25, 0.35, 0.55, 1)
+sky_horizon_color = Color(0.6, 0.55, 0.5, 1)
+ground_bottom_color = Color(0.1, 0.09, 0.08, 1)
+ground_horizon_color = Color(0.6, 0.55, 0.5, 1)
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMat")
+
+[sub_resource type="Environment" id="Env"]
+background_mode = 2
+sky = SubResource("Sky")
+ambient_light_source = 3
+reflected_light_source = 2
+
+[sub_resource type="StandardMaterial3D" id="MatLmGrey"]
+albedo_color = Color(0.75, 0.75, 0.75, 1)
+roughness = 0.9
+
+[sub_resource type="PlaneMesh" id="MeshLmFloor"]
+lightmap_size_hint = Vector2i(62, 62)
+material = SubResource("MatLmGrey")
+add_uv2 = true
+size = Vector2(12, 12)
+
+[sub_resource type="BoxMesh" id="MeshLmWall"]
+lightmap_size_hint = Vector2i(65, 106)
+material = SubResource("MatLmGrey")
+add_uv2 = true
+size = Vector3(12, 4, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="MatLmRed"]
+albedo_color = Color(0.8, 0.15, 0.1, 1)
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="MeshLmBox"]
+lightmap_size_hint = Vector2i(19, 28)
+material = SubResource("MatLmRed")
+add_uv2 = true
+size = Vector3(1.5, 1.5, 1.5)
+
+[node name="FeatureCheck" type="Node3D" unique_id=186551915]
+script = ExtResource("1_fc")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=203449348]
+environment = SubResource("Env")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1189668549]
+transform = Transform3D(0.819152, -0.32899, 0.469846, 0, 0.819152, 0.573576, -0.573576, -0.469846, 0.67101, 0, 10, 0)
+light_energy = 1.2
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1594886415]
+transform = Transform3D(1, 0, 0, 0, 0.84, 0.54, 0, -0.54, 0.84, 0, 9, 14)
+
+[node name="LightmapArea" type="Node3D" parent="." unique_id=1979166672]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -200, 0, 0)
+
+[node name="LightmapGI" type="LightmapGI" parent="LightmapArea" unique_id=663446560]
+quality = 0
+bounces = 2
+light_data = ExtResource("2_o3h2t")
+
+[node name="Floor" type="MeshInstance3D" parent="LightmapArea" unique_id=1070846378]
+mesh = SubResource("MeshLmFloor")
+
+[node name="WallBack" type="MeshInstance3D" parent="LightmapArea" unique_id=1941389482]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -6)
+mesh = SubResource("MeshLmWall")
+
+[node name="WallLeft" type="MeshInstance3D" parent="LightmapArea" unique_id=420862806]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -6, 2, 0)
+mesh = SubResource("MeshLmWall")
+
+[node name="Box" type="MeshInstance3D" parent="LightmapArea" unique_id=215465452]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.75, -1)
+mesh = SubResource("MeshLmBox")
+
+[node name="BakedLamp" type="OmniLight3D" parent="LightmapArea" unique_id=1620169490]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 3, 1)
+light_color = Color(1, 0.8, 0.55, 1)
+light_energy = 4.0
+light_bake_mode = 1
+omni_range = 10.0
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=95250989]
+
+[node name="Report" type="Label" parent="HUD" unique_id=1811422134]
+offset_left = 12.0
+offset_top = 8.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 13

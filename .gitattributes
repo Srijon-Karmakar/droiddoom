@@ -31,3 +31,4 @@
 # Video
 *.mp4 filter=lfs diff=lfs merge=lfs -text
 *.webm filter=lfs diff=lfs merge=lfs -text
+*.lmbake filter=lfs diff=lfs merge=lfs -text

@@ -158,3 +158,14 @@ textures/vram_compression/import_etc2_astc=true
 anti_aliasing/quality/msaa_3d=1
 reflections/reflection_atlas/reflection_size=256
 reflections/reflection_atlas/reflection_count=4
+
+[shader_globals]
+
+occlusion_target={
+"type": "vec3",
+"value": Vector3(0, -1000, 0)
+}
+occlusion_radius={
+"type": "float",
+"value": 0.0
+}

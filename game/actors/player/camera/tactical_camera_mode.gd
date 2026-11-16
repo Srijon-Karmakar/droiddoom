@@ -26,6 +26,10 @@ func get_fov() -> float:
 	return rig.tuning.tactical_fov
 
 
+func get_occlusion_radius() -> float:
+	return rig.tuning.tactical_occlusion_radius
+
+
 func get_move_yaw() -> float:
 	return deg_to_rad(rig.tactical_yaw_deg)
 

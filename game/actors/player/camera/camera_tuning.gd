@@ -16,6 +16,8 @@ extends Resource
 @export var tactical_look_ahead_max: float = 3.0
 ## Follow smoothing (higher = snappier).
 @export var tactical_smoothing: float = 8.0
+## Occlusion fade radius around the camera→player line (m).
+@export var tactical_occlusion_radius: float = 3.0
 ## Gamepad/touch aim: distance of the aim point from the player (m).
 @export var stick_aim_distance: float = 8.0
 ## Stick deflection below this keeps the last aim direction.
@@ -37,6 +39,8 @@ extends Resource
 @export var mouse_sensitivity: float = 0.0025
 ## Stick look: radians per second at full deflection.
 @export var stick_look_speed: float = 2.5
+## Occlusion fade radius around the camera→player line (m).
+@export var shoulder_occlusion_radius: float = 1.0
 ## Gap kept between the camera and a wall it is pulled in by (m).
 @export var collision_margin: float = 0.2
 
@@ -45,5 +49,7 @@ extends Resource
 @export var blend_time: float = 0.3
 ## Maximum aim raycast distance (m).
 @export var aim_range: float = 60.0
+## Height above the player's feet that occlusion fade keeps visible (m).
+@export var occlusion_target_height: float = 1.1
 ## Height of the fallback aim plane above the player's feet (m).
 @export var aim_plane_height: float = 1.2

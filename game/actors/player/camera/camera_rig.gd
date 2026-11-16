@@ -21,6 +21,8 @@ var _active: BaseCameraMode
 var _blend: float = 1.0
 var _blend_from: Transform3D = Transform3D.IDENTITY
 var _blend_fov_from: float = 60.0
+var _blend_radius_from: float = 0.0
+var _occlusion_radius: float = 0.0
 var _move_yaw: float = 0.0
 var _move_yaw_from: float = 0.0
 var _exclude: Array[RID] = []
@@ -46,6 +48,7 @@ func _ready() -> void:
 
 func _exit_tree() -> void:
 	InputRouter.unregister_camera_rig(self)
+	RenderingServer.global_shader_parameter_set(&"occlusion_radius", 0.0)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -72,16 +75,24 @@ func _process(delta: float) -> void:
 		camera.global_transform = _blend_from.interpolate_with(desired, w)
 		camera.fov = lerpf(_blend_fov_from, _active.get_fov(), w)
 		_move_yaw = lerp_angle(_move_yaw_from, _active.get_move_yaw(), w)
+		_occlusion_radius = lerpf(_blend_radius_from, _active.get_occlusion_radius(), w)
 	else:
 		camera.global_transform = desired
 		camera.fov = _active.get_fov()
 		_move_yaw = _active.get_move_yaw()
+		_occlusion_radius = _active.get_occlusion_radius()
 	aim_target = _active.compute_aim_target()
+	_update_occlusion()
 
 
 ## World yaw that "forward" on the move stick maps to (blended during switches).
 func get_move_yaw() -> float:
 	return _move_yaw
+
+
+## Current occlusion fade radius (m), blended during switches.
+func get_occlusion_radius() -> float:
+	return _occlusion_radius
 
 
 ## Name of the active mode, for debug display only. Gameplay must not branch on it.
@@ -104,10 +115,20 @@ func _switch_to(mode: Settings.CameraMode, blend: bool) -> void:
 		_blend_from = camera.global_transform
 		_blend_fov_from = camera.fov
 		_move_yaw_from = _move_yaw
+		_blend_radius_from = _occlusion_radius
 	else:
 		_blend = 1.0
 		_move_yaw = _active.get_move_yaw()
+		_occlusion_radius = _active.get_occlusion_radius()
 	_apply_cursor()
+
+
+## Feeds the kit shader (world/kits/common/kit_fade.gdshader): fade what is
+## between the camera and the player.
+func _update_occlusion() -> void:
+	var focus: Vector3 = target.global_position + Vector3(0.0, tuning.occlusion_target_height, 0.0)
+	RenderingServer.global_shader_parameter_set(&"occlusion_target", focus)
+	RenderingServer.global_shader_parameter_set(&"occlusion_radius", _occlusion_radius)
 
 
 func _apply_cursor() -> void:

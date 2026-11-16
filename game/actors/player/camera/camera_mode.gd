@@ -34,6 +34,11 @@ func get_fov() -> float:
 	return 60.0
 
 
+## Radius (m) of the occlusion fade cylinder in this mode.
+func get_occlusion_radius() -> float:
+	return 0.0
+
+
 ## World-space yaw that "forward" on the move stick maps to.
 func get_move_yaw() -> float:
 	return 0.0

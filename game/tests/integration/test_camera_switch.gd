@@ -49,6 +49,18 @@ func test_switch_mid_move_keeps_moving_smoothly() -> void:
 	assert_ne(InputRouter.get_aim_target(), Vector3.ZERO, "aim still served")
 
 
+func test_occlusion_radius_follows_mode() -> void:
+	if _lfs_missing():
+		pending("Needs LFS art (CI runs without LFS)")
+		return
+	_build_world()
+	await wait_frames(3)
+	assert_almost_eq(_rig.get_occlusion_radius(), _rig.tuning.tactical_occlusion_radius, 0.001)
+	Settings.set_camera_mode(Settings.CameraMode.SHOULDER)
+	await wait_seconds(_rig.tuning.blend_time + 0.1)
+	assert_almost_eq(_rig.get_occlusion_radius(), _rig.tuning.shoulder_occlusion_radius, 0.001)
+
+
 func _build_world() -> void:
 	_world = Node3D.new()
 	var floor_body: StaticBody3D = StaticBody3D.new()

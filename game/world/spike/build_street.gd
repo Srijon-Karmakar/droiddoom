@@ -37,21 +37,17 @@ func _init() -> void:
 	_collision = Node3D.new()
 	_collision.name = "Collision"
 	_add(_collision)
-	for tex: String in [
-		"asphalt_02",
-		"concrete_floor_worn_001",
-		"cracked_concrete_wall",
-		"red_brick_03",
-		"rusty_metal_02",
-		"corrugated_iron",
-	]:
+	# Ground never blocks the view: plain PBR. Everything that can stand between
+	# the camera and the player uses the occlusion-fade kit shader (P1-05).
+	for tex: String in ["asphalt_02", "concrete_floor_worn_001"]:
 		_mats[tex] = SpikeKit.pbr_material(tex)
-	var glass: StandardMaterial3D = StandardMaterial3D.new()
-	glass.albedo_color = Color(0.03, 0.035, 0.04)
-	glass.roughness = 0.12
-	_mats["glass"] = glass
+	for tex: String in [
+		"cracked_concrete_wall", "red_brick_03", "rusty_metal_02", "corrugated_iron"
+	]:
+		_mats[tex] = KitMaterials.pbr(tex)
+	_mats["glass"] = KitMaterials.plain("glass", Color(0.03, 0.035, 0.04), 0.12)
 	_mats["rubble"] = SpikeKit.tinted_material("cracked_concrete_wall", Color(0.62, 0.6, 0.58))
-	_mats["axiom_red"] = SpikeKit.emissive_material(Color(1.0, 0.06, 0.12), 5.0)
+	_mats["axiom_red"] = KitMaterials.emissive("axiom_red", Color(1.0, 0.06, 0.12), 5.0)
 
 	_build_environment()
 	_build_ground()

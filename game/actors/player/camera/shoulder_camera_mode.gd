@@ -43,6 +43,10 @@ func get_fov() -> float:
 	return rig.tuning.shoulder_fov
 
 
+func get_occlusion_radius() -> float:
+	return rig.tuning.shoulder_occlusion_radius
+
+
 func get_move_yaw() -> float:
 	return yaw
 

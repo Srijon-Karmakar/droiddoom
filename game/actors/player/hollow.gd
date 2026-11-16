@@ -7,9 +7,18 @@ extends CharacterBody3D
 
 @export var stats: PlayerStats
 
+## Player health. Max comes from `stats.max_hp`.
+@onready var health: HealthComponent = $Health
 @onready var _legs: Node3D = $Legs
 @onready var _turret: Node3D = $Turret
 @onready var _muzzle: Marker3D = $Turret/Muzzle
+
+
+func _ready() -> void:
+	health.max_health = stats.max_hp
+	health.reset()
+	health.damaged.connect(_on_damaged)
+	health.died.connect(_on_died)
 
 
 func _physics_process(delta: float) -> void:
@@ -40,6 +49,12 @@ func _process(delta: float) -> void:
 		)
 
 
+## Takes knockback from a hit (horizontal push, m/s).
+func apply_knockback(push: Vector3) -> void:
+	velocity.x += push.x
+	velocity.z += push.z
+
+
 ## World position where shots start.
 func get_muzzle_position() -> Vector3:
 	return _muzzle.global_position
@@ -65,3 +80,13 @@ static func rotate_angle_toward(from: float, to: float, max_step: float) -> floa
 	if absf(diff) <= max_step:
 		return wrapf(to, -PI, PI)
 	return wrapf(from + signf(diff) * max_step, -PI, PI)
+
+
+func _on_damaged(info: DamageInfo, final_amount: float) -> void:
+	if info.knockback != Vector3.ZERO:
+		apply_knockback(info.knockback)
+	EventBus.player_damaged.emit(final_amount, info.type)
+
+
+func _on_died(_info: DamageInfo) -> void:
+	EventBus.player_died.emit()

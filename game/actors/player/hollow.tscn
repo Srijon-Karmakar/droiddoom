@@ -1,0 +1,169 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://actors/player/hollow.gd" id="1_hollow"]
+[ext_resource type="Resource" path="res://data/player/player_stats_hollow.tres" id="2_stats"]
+[ext_resource type="Texture2D" path="res://assets/textures/pbr/metal_plate/metal_plate_diff_1k.jpg" id="3_diff"]
+[ext_resource type="Texture2D" path="res://assets/textures/pbr/metal_plate/metal_plate_nor_gl_1k.jpg" id="4_nor"]
+[ext_resource type="Texture2D" path="res://assets/textures/pbr/metal_plate/metal_plate_arm_1k.jpg" id="5_arm"]
+
+[sub_resource type="ORMMaterial3D" id="mat_hull"]
+albedo_color = Color(0.62, 0.66, 0.7, 1)
+albedo_texture = ExtResource("3_diff")
+orm_texture = ExtResource("5_arm")
+normal_enabled = true
+normal_texture = ExtResource("4_nor")
+uv1_triplanar = true
+uv1_scale = Vector3(1.5, 1.5, 1.5)
+
+[sub_resource type="StandardMaterial3D" id="mat_dark"]
+albedo_color = Color(0.13, 0.14, 0.16, 1)
+metallic = 0.8
+roughness = 0.45
+
+[sub_resource type="StandardMaterial3D" id="mat_visor"]
+albedo_color = Color(0.1, 0.9, 1, 1)
+emission_enabled = true
+emission = Color(0.1, 0.9, 1, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="CylinderMesh" id="cyl_barrel"]
+top_radius = 0.045
+bottom_radius = 0.05
+height = 0.5
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CapsuleShape3D" id="shape_body"]
+radius = 0.45
+height = 1.9
+
+[sub_resource type="BoxMesh" id="box_hips"]
+size = Vector3(0.62, 0.22, 0.38)
+
+[sub_resource type="BoxMesh" id="box_thigh"]
+size = Vector3(0.2, 0.5, 0.24)
+
+[sub_resource type="BoxMesh" id="box_shin"]
+size = Vector3(0.18, 0.46, 0.22)
+
+[sub_resource type="BoxMesh" id="box_foot"]
+size = Vector3(0.26, 0.1, 0.42)
+
+[sub_resource type="BoxMesh" id="box_torso"]
+size = Vector3(0.8, 0.55, 0.5)
+
+[sub_resource type="BoxMesh" id="box_head"]
+size = Vector3(0.36, 0.26, 0.36)
+
+[sub_resource type="BoxMesh" id="box_visor"]
+size = Vector3(0.3, 0.07, 0.04)
+
+[sub_resource type="BoxMesh" id="box_shoulder"]
+size = Vector3(0.26, 0.22, 0.36)
+
+[sub_resource type="BoxMesh" id="box_arm"]
+size = Vector3(0.16, 0.45, 0.18)
+
+[sub_resource type="BoxMesh" id="box_pack"]
+size = Vector3(0.56, 0.44, 0.24)
+
+[sub_resource type="BoxMesh" id="box_gun"]
+size = Vector3(0.16, 0.18, 0.62)
+
+[node name="Hollow" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 9
+script = ExtResource("1_hollow")
+stats = ExtResource("2_stats")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
+shape = SubResource("shape_body")
+
+[node name="Legs" type="Node3D" parent="."]
+
+[node name="Hips" type="MeshInstance3D" parent="Legs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.98, 0)
+mesh = SubResource("box_hips")
+surface_material_override/0 = SubResource("mat_dark")
+
+[node name="ThighL" type="MeshInstance3D" parent="Legs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.72, 0)
+mesh = SubResource("box_thigh")
+surface_material_override/0 = SubResource("mat_hull")
+
+[node name="ThighR" type="MeshInstance3D" parent="Legs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.72, 0)
+mesh = SubResource("box_thigh")
+surface_material_override/0 = SubResource("mat_hull")
+
+[node name="ShinL" type="MeshInstance3D" parent="Legs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.3, 0.02)
+mesh = SubResource("box_shin")
+surface_material_override/0 = SubResource("mat_hull")
+
+[node name="ShinR" type="MeshInstance3D" parent="Legs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.3, 0.02)
+mesh = SubResource("box_shin")
+surface_material_override/0 = SubResource("mat_hull")
+
+[node name="FootL" type="MeshInstance3D" parent="Legs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.05, -0.06)
+mesh = SubResource("box_foot")
+surface_material_override/0 = SubResource("mat_dark")
+
+[node name="FootR" type="MeshInstance3D" parent="Legs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.05, -0.06)
+mesh = SubResource("box_foot")
+surface_material_override/0 = SubResource("mat_dark")
+
+[node name="Turret" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.05, 0)
+
+[node name="Torso" type="MeshInstance3D" parent="Turret"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32, 0)
+mesh = SubResource("box_torso")
+surface_material_override/0 = SubResource("mat_hull")
+
+[node name="Head" type="MeshInstance3D" parent="Turret"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, 0.02)
+mesh = SubResource("box_head")
+surface_material_override/0 = SubResource("mat_hull")
+
+[node name="Visor" type="MeshInstance3D" parent="Turret"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.76, -0.17)
+mesh = SubResource("box_visor")
+surface_material_override/0 = SubResource("mat_visor")
+
+[node name="ShoulderL" type="MeshInstance3D" parent="Turret"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.53, 0.5, 0)
+mesh = SubResource("box_shoulder")
+surface_material_override/0 = SubResource("mat_dark")
+
+[node name="ShoulderR" type="MeshInstance3D" parent="Turret"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.53, 0.5, 0)
+mesh = SubResource("box_shoulder")
+surface_material_override/0 = SubResource("mat_dark")
+
+[node name="ArmL" type="MeshInstance3D" parent="Turret"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.53, 0.15, 0)
+mesh = SubResource("box_arm")
+surface_material_override/0 = SubResource("mat_hull")
+
+[node name="Backpack" type="MeshInstance3D" parent="Turret"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, 0.36)
+mesh = SubResource("box_pack")
+surface_material_override/0 = SubResource("mat_dark")
+
+[node name="GunBody" type="MeshInstance3D" parent="Turret"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.28, -0.28)
+mesh = SubResource("box_gun")
+surface_material_override/0 = SubResource("mat_dark")
+
+[node name="Barrel" type="MeshInstance3D" parent="Turret"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.5, 0.3, -0.82)
+mesh = SubResource("cyl_barrel")
+surface_material_override/0 = SubResource("mat_dark")
+
+[node name="Muzzle" type="Marker3D" parent="Turret"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.3, -1.1)

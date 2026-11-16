@@ -20,6 +20,8 @@ const SEG_LEN: float = 8.0
 const FLOOR_H: float = 3.5
 const LIGHTMAP_TEXEL: float = 0.4
 const LAYER_WORLD: int = 1
+## Props lower than this (m) get no collider.
+const MIN_COLLIDER_HEIGHT: float = 0.45
 
 var _root: Node3D
 var _collision: Node3D
@@ -309,7 +311,9 @@ func _place_prop(parent: Node3D, prop: String, pos: Vector3, yaw: float, tilt: V
 	parent.add_child(inst)
 	inst.owner = _root
 	var box: AABB = _visual_aabb(inst, Transform3D.IDENTITY)
-	if box.size.length() > 0.3:
+	# Low props (tyres, bricks) get no collider: a capsule can't climb them and
+	# getting stuck on debris feels broken. Cover-height props keep one.
+	if box.size.y > MIN_COLLIDER_HEIGHT:
 		_collider(inst.transform * Transform3D(Basis(), box.get_center()), box.size)
 
 

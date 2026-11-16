@@ -1,0 +1,20 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://actors/player/camera/camera_rig.gd" id="1_rig"]
+[ext_resource type="Script" path="res://actors/player/camera/tactical_camera_mode.gd" id="2_tac"]
+[ext_resource type="Script" path="res://actors/player/camera/shoulder_camera_mode.gd" id="3_sho"]
+[ext_resource type="Resource" path="res://data/camera/camera_tuning_default.tres" id="4_tuning"]
+
+[node name="CameraRig" type="Node3D"]
+script = ExtResource("1_rig")
+tuning = ExtResource("4_tuning")
+
+[node name="Tactical" type="Node" parent="."]
+script = ExtResource("2_tac")
+
+[node name="Shoulder" type="Node" parent="."]
+script = ExtResource("3_sho")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+fov = 50.0
+far = 300.0

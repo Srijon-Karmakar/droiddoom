@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="PlayerStats" format=3]
+
+[ext_resource type="Script" path="res://actors/player/player_stats.gd" id="1_ps"]
+
+[resource]
+script = ExtResource("1_ps")
+move_speed = 6.0
+acceleration = 40.0
+friction = 30.0
+gravity = 20.0
+turret_turn_speed = 14.0
+leg_turn_speed = 10.0
+max_hp = 100.0

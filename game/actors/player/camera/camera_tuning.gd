@@ -1,0 +1,49 @@
+class_name CameraTuning
+extends Resource
+## Camera feel values for both camera modes (TDD §3.3). Data lives in
+## `data/camera/*.tres`. Angles in degrees unless the name says rad.
+
+@export_group("Tactical")
+## Downward angle of the high camera.
+@export var tactical_pitch_deg: float = 55.0
+## Distance from the focus point to the camera.
+@export var tactical_distance: float = 14.0
+## Field of view in Tactical mode.
+@export var tactical_fov: float = 50.0
+## Share of the player→aim vector the camera leans toward.
+@export var tactical_look_ahead_factor: float = 0.25
+## Maximum look-ahead distance (m).
+@export var tactical_look_ahead_max: float = 3.0
+## Follow smoothing (higher = snappier).
+@export var tactical_smoothing: float = 8.0
+## Gamepad/touch aim: distance of the aim point from the player (m).
+@export var stick_aim_distance: float = 8.0
+## Stick deflection below this keeps the last aim direction.
+@export var stick_deadzone: float = 0.25
+
+@export_group("Shoulder")
+## Point the camera orbits around, relative to the player's feet.
+@export var shoulder_pivot: Vector3 = Vector3(0.0, 1.6, 0.0)
+## Camera offset from the pivot (right, up, back).
+@export var shoulder_offset: Vector3 = Vector3(0.8, 0.4, 3.4)
+## Field of view in Shoulder mode.
+@export var shoulder_fov: float = 70.0
+## Pitch limits (rad). Negative looks down.
+@export var shoulder_pitch_min_rad: float = -0.6
+@export var shoulder_pitch_max_rad: float = 0.35
+## Pitch when entering Shoulder mode (rad).
+@export var shoulder_start_pitch_rad: float = -0.15
+## Mouse look: radians per pixel.
+@export var mouse_sensitivity: float = 0.0025
+## Stick look: radians per second at full deflection.
+@export var stick_look_speed: float = 2.5
+## Gap kept between the camera and a wall it is pulled in by (m).
+@export var collision_margin: float = 0.2
+
+@export_group("Shared")
+## Mode switch blend time (s).
+@export var blend_time: float = 0.3
+## Maximum aim raycast distance (m).
+@export var aim_range: float = 60.0
+## Height of the fallback aim plane above the player's feet (m).
+@export var aim_plane_height: float = 1.2

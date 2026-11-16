@@ -1,0 +1,127 @@
+class_name CameraRig
+extends Node3D
+## Single-camera rig with switchable modes (TDD §3.3, D-013). The active
+## camera mode (BaseCameraMode) supplies the desired transform; the rig blends over
+## `tuning.blend_time` on a switch, also blending the move basis so held
+## movement doesn't jerk. Registers with InputRouter, which serves aim to gameplay.
+
+## Node the camera follows (HOLLOW).
+@export var target: Node3D
+## Feel values for both modes.
+@export var tuning: CameraTuning
+## Tactical camera yaw for this sector (deg). Set per sector so the camera
+## looks along streets, not into facades.
+@export var tactical_yaw_deg: float = 0.0
+
+## Aim point computed this frame (world space).
+var aim_target: Vector3 = Vector3.ZERO
+
+var _modes: Dictionary = {}
+var _active: BaseCameraMode
+var _blend: float = 1.0
+var _blend_from: Transform3D = Transform3D.IDENTITY
+var _blend_fov_from: float = 60.0
+var _move_yaw: float = 0.0
+var _move_yaw_from: float = 0.0
+var _exclude: Array[RID] = []
+
+@onready var camera: Camera3D = $Camera3D
+
+
+func _ready() -> void:
+	_modes[Settings.CameraMode.TACTICAL] = $Tactical
+	_modes[Settings.CameraMode.SHOULDER] = $Shoulder
+	for mode: BaseCameraMode in _modes.values():
+		mode.rig = self
+	var body: CollisionObject3D = target as CollisionObject3D
+	if body != null:
+		_exclude.append(body.get_rid())
+	aim_target = target.global_position - target.global_basis.z * 5.0
+	camera.current = true
+	InputRouter.register_camera_rig(self)
+	EventBus.camera_mode_changed.connect(_on_camera_mode_changed)
+	EventBus.input_device_changed.connect(_on_input_device_changed)
+	_switch_to(Settings.camera_mode, false)
+
+
+func _exit_tree() -> void:
+	InputRouter.unregister_camera_rig(self)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed(&"switch_camera"):
+		Settings.toggle_camera_mode()
+	elif _active.handle_input(event):
+		pass
+	elif event.is_action_pressed(&"pause") and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	elif event is InputEventMouseButton and event.is_pressed():
+		_apply_cursor()
+		return
+	else:
+		return
+	get_viewport().set_input_as_handled()
+
+
+func _process(delta: float) -> void:
+	_active.update(delta)
+	var desired: Transform3D = _active.get_desired_transform()
+	if _blend < 1.0:
+		_blend = minf(1.0, _blend + delta / maxf(tuning.blend_time, 0.001))
+		var w: float = smoothstep(0.0, 1.0, _blend)
+		camera.global_transform = _blend_from.interpolate_with(desired, w)
+		camera.fov = lerpf(_blend_fov_from, _active.get_fov(), w)
+		_move_yaw = lerp_angle(_move_yaw_from, _active.get_move_yaw(), w)
+	else:
+		camera.global_transform = desired
+		camera.fov = _active.get_fov()
+		_move_yaw = _active.get_move_yaw()
+	aim_target = _active.compute_aim_target()
+
+
+## World yaw that "forward" on the move stick maps to (blended during switches).
+func get_move_yaw() -> float:
+	return _move_yaw
+
+
+## Name of the active mode, for debug display only. Gameplay must not branch on it.
+func get_mode_name() -> String:
+	return _active.name
+
+
+## Raycast that ignores the followed target.
+func raycast(from: Vector3, to: Vector3, mask: int) -> Dictionary:
+	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(from, to, mask)
+	query.exclude = _exclude
+	return get_world_3d().direct_space_state.intersect_ray(query)
+
+
+func _switch_to(mode: Settings.CameraMode, blend: bool) -> void:
+	_active = _modes[mode]
+	_active.enter()
+	if blend:
+		_blend = 0.0
+		_blend_from = camera.global_transform
+		_blend_fov_from = camera.fov
+		_move_yaw_from = _move_yaw
+	else:
+		_blend = 1.0
+		_move_yaw = _active.get_move_yaw()
+	_apply_cursor()
+
+
+func _apply_cursor() -> void:
+	if _active.wants_cursor_visible():
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	elif InputRouter.active_device == InputRouter.Device.KEYBOARD_MOUSE:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	else:
+		Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+
+
+func _on_camera_mode_changed(mode: int) -> void:
+	_switch_to(mode as Settings.CameraMode, true)
+
+
+func _on_input_device_changed(_device: int) -> void:
+	_apply_cursor()

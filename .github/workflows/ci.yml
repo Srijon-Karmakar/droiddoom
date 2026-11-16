@@ -1,0 +1,76 @@
+# CI: lint + format check + headless tests on every push and pull request.
+# Free tier: Linux runners only, cancels superseded runs, caches Godot + pip.
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+    paths-ignore: ["**.md"]
+  pull_request:
+    paths-ignore: ["**.md"]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GODOT_VERSION: "4.7.2"
+
+jobs:
+  lint:
+    name: Lint + format
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: tools/requirements-dev.txt
+      - run: pip install -r tools/requirements-dev.txt
+      - name: gdlint
+        run: gdlint game
+      - name: gdformat --check
+        run: gdformat --check game/autoload game/world game/tests
+
+  test:
+    name: Godot headless tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Cache Godot
+        id: godot-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/godot
+          key: godot-${{ env.GODOT_VERSION }}-linux-x86_64
+
+      - name: Download Godot ${{ env.GODOT_VERSION }}
+        if: steps.godot-cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ~/godot
+          curl -fsSL -o /tmp/godot.zip \
+            "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          unzip -q /tmp/godot.zip -d ~/godot
+          mv ~/godot/Godot_v${GODOT_VERSION}-stable_linux.x86_64 ~/godot/godot
+          chmod +x ~/godot/godot
+
+      - name: Import project
+        run: ~/godot/godot --headless --path game --import
+
+      - name: Smoke test (boot scene, fail on script errors)
+        run: |
+          ~/godot/godot --headless --path game --quit-after 120 2>&1 | tee smoke.log
+          if grep -E "SCRIPT ERROR|Parse Error|ERROR:" smoke.log; then
+            echo "::error::Errors while booting the project"
+            exit 1
+          fi
+
+      - name: GUT unit + integration tests
+        run: ~/godot/godot --headless --path game -s res://addons/gut/gut_cmdln.gd

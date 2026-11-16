@@ -135,6 +135,8 @@ venv/
 # 7. ART / AUDIO WORK FILES (keep exported assets, not scratch/backups)
 # ---------------------------------------------------------------------
 *.kra~
+# Blender sources live outside the repo (D-023)
+*.blend
 *.blend1
 *.blend2
 *.psd~

@@ -9,3 +9,16 @@
 | Godot Engine 4.7.2 | Engine | https://godotengine.org | Godot contributors | MIT | Yes (engine license text in credits) | Whole game | 2026-11-14 |
 | GUT 9.7.1 | Dev plugin (not shipped, excluded from exports) | https://github.com/bitwes/Gut | Butch Wesley | MIT | No (not shipped) | `game/addons/gut/` | 2026-11-14 |
 | gdtoolkit 4.5.0 | Dev tool (not shipped) | https://github.com/Scony/godot-gdscript-toolkit | Pawel Lampe | MIT | No (not shipped) | `.venv` | 2026-11-14 |
+| asphalt_02 (1K albedo/normal/ARM) | PBR texture | https://polyhaven.com/a/asphalt_02 | Poly Haven | CC0 | No | `game/assets/textures/pbr/asphalt_02/` (Phase 0.5 spike) | 2026-11-16 |
+| concrete_floor_worn_001 (1K albedo/normal/ARM) | PBR texture | https://polyhaven.com/a/concrete_floor_worn_001 | Poly Haven | CC0 | No | `game/assets/textures/pbr/concrete_floor_worn_001/` (Phase 0.5 spike) | 2026-11-16 |
+| cracked_concrete_wall (1K albedo/normal/ARM) | PBR texture | https://polyhaven.com/a/cracked_concrete_wall | Poly Haven | CC0 | No | `game/assets/textures/pbr/cracked_concrete_wall/` (Phase 0.5 spike) | 2026-11-16 |
+| red_brick_03 (1K albedo/normal/ARM) | PBR texture | https://polyhaven.com/a/red_brick_03 | Poly Haven | CC0 | No | `game/assets/textures/pbr/red_brick_03/` (Phase 0.5 spike) | 2026-11-16 |
+| rusty_metal_02 (1K albedo/normal/ARM) | PBR texture | https://polyhaven.com/a/rusty_metal_02 | Poly Haven | CC0 | No | `game/assets/textures/pbr/rusty_metal_02/` (Phase 0.5 spike) | 2026-11-16 |
+| corrugated_iron (1K albedo/normal/ARM) | PBR texture | https://polyhaven.com/a/corrugated_iron | Poly Haven | CC0 | No | `game/assets/textures/pbr/corrugated_iron/` (Phase 0.5 spike) | 2026-11-16 |
+| metal_plate (1K albedo/normal/ARM) | PBR texture | https://polyhaven.com/a/metal_plate | Poly Haven | CC0 | No | `game/assets/textures/pbr/metal_plate/` (Phase 0.5 spike) | 2026-11-16 |
+| barrel_03 (1K glTF) | 3D model | https://polyhaven.com/a/barrel_03 | Poly Haven | CC0 | No | `game/assets/models/props/barrel_03/` (Phase 0.5 spike) | 2026-11-16 |
+| old_tyre (1K glTF) | 3D model | https://polyhaven.com/a/old_tyre | Poly Haven | CC0 | No | `game/assets/models/props/old_tyre/` (Phase 0.5 spike) | 2026-11-16 |
+| utility_box_01 (1K glTF) | 3D model | https://polyhaven.com/a/utility_box_01 | Poly Haven | CC0 | No | `game/assets/models/props/utility_box_01/` (Phase 0.5 spike) | 2026-11-16 |
+| wooden_crate_01 (1K glTF) | 3D model | https://polyhaven.com/a/wooden_crate_01 | Poly Haven | CC0 | No | `game/assets/models/props/wooden_crate_01/` (Phase 0.5 spike) | 2026-11-16 |
+| covered_car (1K glTF) | 3D model | https://polyhaven.com/a/covered_car | Poly Haven | CC0 | No | `game/assets/models/props/covered_car/` (Phase 0.5 spike) | 2026-11-16 |
+| kloppenheim_06_puresky (2K .hdr) | HDRI sky | https://polyhaven.com/a/kloppenheim_06_puresky | Poly Haven | CC0 | No | `game/assets/textures/sky/` (Phase 0.5 spike) | 2026-11-16 |

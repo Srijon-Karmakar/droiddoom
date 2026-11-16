@@ -6,10 +6,11 @@
 # ---- Git LFS: large binary assets ----
 # 3D
 *.glb filter=lfs diff=lfs merge=lfs -text
-*.gltf filter=lfs diff=lfs merge=lfs -text
+*.gltf text eol=lf
+*.bin filter=lfs diff=lfs merge=lfs -text
 *.fbx filter=lfs diff=lfs merge=lfs -text
 *.obj filter=lfs diff=lfs merge=lfs -text
-*.blend filter=lfs diff=lfs merge=lfs -text
+# *.blend: kept OUTSIDE the repo (D-023), see .gitignore
 # Textures / images
 *.png filter=lfs diff=lfs merge=lfs -text
 *.jpg filter=lfs diff=lfs merge=lfs -text

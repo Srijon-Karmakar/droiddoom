@@ -42,7 +42,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          lfs: true
+          lfs: false   # tests need no art; saves the 1 GB/month free LFS bandwidth
 
       - name: Cache Godot
         id: godot-cache
@@ -66,7 +66,8 @@ jobs:
 
       - name: Smoke test (boot scene, fail on script errors)
         run: |
-          ~/godot/godot --headless --path game --quit-after 120 2>&1 | tee smoke.log
+          # Boot scene: it needs no LFS art (CI checks out without LFS).
+          ~/godot/godot --headless --path game --quit-after 120 res://world/common/boot.tscn 2>&1 | tee smoke.log
           if grep -E "SCRIPT ERROR|Parse Error|ERROR:" smoke.log; then
             echo "::error::Errors while booting the project"
             exit 1

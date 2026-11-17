@@ -56,7 +56,7 @@ func compute_aim_target() -> Vector3:
 	var pivot: Vector3 = rig.target.global_position + rig.tuning.shoulder_pivot
 	var from: Vector3 = aim_ray_start(_transform.origin, forward, pivot)
 	var to: Vector3 = _transform.origin + forward * rig.tuning.aim_range
-	var hit: Dictionary = rig.raycast(from, to, PhysicsLayers.WORLD | PhysicsLayers.ENEMIES)
+	var hit: Dictionary = rig.raycast(from, to, PhysicsLayers.WORLD | PhysicsLayers.ENEMIES, true)
 	return to if hit.is_empty() else hit["position"]
 
 

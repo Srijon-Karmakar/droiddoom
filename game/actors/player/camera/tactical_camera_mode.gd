@@ -4,6 +4,9 @@ extends BaseCameraMode
 ## the aim, smoothed follow. Mouse aims at what the cursor points at; a stick
 ## aims along the ground relative to the camera yaw.
 
+## Hit normals steeper than this count as ground (aim at gun height instead).
+const GROUND_NORMAL_Y: float = 0.7
+
 var _transform: Transform3D = Transform3D.IDENTITY
 ## Last stick aim direction in camera space (x right, y down/back).
 var _stick_dir: Vector2 = Vector2(0.0, -1.0)
@@ -49,9 +52,11 @@ func compute_aim_target() -> Vector3:
 	var ray_origin: Vector3 = camera.project_ray_origin(mouse)
 	var ray_dir: Vector3 = camera.project_ray_normal(mouse)
 	var hit: Dictionary = rig.raycast(
-		ray_origin, ray_origin + ray_dir * 200.0, PhysicsLayers.WORLD | PhysicsLayers.ENEMIES
+		ray_origin, ray_origin + ray_dir * 200.0, PhysicsLayers.WORLD | PhysicsLayers.ENEMIES, true
 	)
-	if not hit.is_empty():
+	# Cursor on a wall or an enemy: aim right at it. Cursor on the ground: aim
+	# at gun height above that spot, so shots fly level (twin-stick feel).
+	if not hit.is_empty() and (hit["normal"] as Vector3).y < GROUND_NORMAL_Y:
 		return hit["position"]
 	var plane: Plane = Plane(Vector3.UP, origin.y + t.aim_plane_height)
 	var on_plane: Variant = plane.intersects_ray(ray_origin, ray_dir)

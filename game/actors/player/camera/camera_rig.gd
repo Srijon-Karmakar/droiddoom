@@ -100,10 +100,12 @@ func get_mode_name() -> String:
 	return _active.name
 
 
-## Raycast that ignores the followed target.
-func raycast(from: Vector3, to: Vector3, mask: int) -> Dictionary:
+## Raycast that ignores the followed target. `areas` also hits Area3Ds on
+## `mask` (enemy hurtboxes), so aim snaps onto targets.
+func raycast(from: Vector3, to: Vector3, mask: int, areas: bool = false) -> Dictionary:
 	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(from, to, mask)
 	query.exclude = _exclude
+	query.collide_with_areas = areas
 	return get_world_3d().direct_space_state.intersect_ray(query)
 
 

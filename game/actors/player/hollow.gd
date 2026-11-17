@@ -9,6 +9,8 @@ extends CharacterBody3D
 
 ## Player health. Max comes from `stats.max_hp`.
 @onready var health: HealthComponent = $Health
+## Primary gun (Pulse Rifle by default).
+@onready var weapon: Weapon = $Turret/Muzzle/PrimaryWeapon
 @onready var _legs: Node3D = $Legs
 @onready var _turret: Node3D = $Turret
 @onready var _muzzle: Marker3D = $Turret/Muzzle
@@ -19,6 +21,8 @@ func _ready() -> void:
 	health.reset()
 	health.damaged.connect(_on_damaged)
 	health.died.connect(_on_died)
+	weapon.wielder = self
+	weapon.set_exclude([get_rid()])
 
 
 func _physics_process(delta: float) -> void:
@@ -47,6 +51,8 @@ func _process(delta: float) -> void:
 		_turret.rotation.y = rotate_angle_toward(
 			_turret.rotation.y, aim_yaw, stats.turret_turn_speed * delta
 		)
+	if InputRouter.is_primary_fire_held() and not health.is_dead():
+		weapon.try_fire(get_muzzle_position(), InputRouter.get_aim_target())
 
 
 ## Takes knockback from a hit (horizontal push, m/s).

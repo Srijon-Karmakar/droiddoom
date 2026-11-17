@@ -58,6 +58,11 @@ func get_stick_aim_vector() -> Vector2:
 	return Input.get_vector(&"aim_left", &"aim_right", &"aim_up", &"aim_down")
 
 
+## True while the primary fire input is held (touch auto-fire comes in P1-11).
+func is_primary_fire_held() -> bool:
+	return Input.is_action_pressed(&"fire_primary")
+
+
 ## World-space point the player is aiming at. `Vector3.ZERO` with no camera rig.
 func get_aim_target() -> Vector3:
 	return _rig.aim_target if _rig != null else Vector3.ZERO
